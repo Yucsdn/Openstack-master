@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="{% static 'css/layui.css' %}" type="text/css" media="all"/>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}" type="text/css" media="all"/>
+    <title>Dashboard</title>
+</head>
+<body class="layui-layout-body">
+    
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header custom-header">
+            
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item slide-sidebar">
+                    <a href="{% url 'object:console' %}" class="icon-font" target="right"><i class="ai ai-menufold"></i></a>
+                </li>
+            </ul>
+
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item"><span>admin</span></li>
+                <li class="layui-nav-item"><a href="https://www.baidu.com">帮助中心</a></li>
+                <li class="layui-nav-item"><a href="/openstack/login/">退出</a></li>
+            </ul>
+        </div>
+
+        <div class="layui-side custom-admin">
+            <div class="layui-side-scroll">
+
+                <div class="custom-logo">
+                    <img src="{% static 'images/logo.png' %}" alt=""/>
+                    <h1>OpenStack</h1>
+                </div>
+                <ul id="Nav" class="layui-nav layui-nav-tree">
+                    <li class="layui-nav-item">
+                            <i class="layui-icon">&#xe609;</i>
+                            <em>主页</em>
+                            <dd><a href="{% url 'object:console' %}" target="right">控制台(None)</a></dd>
+                    </li>
+                    <li class="layui-nav-item">
+                            <i class="layui-icon">&#xe857;</i>
+                            <em>组件</em>
+                            <dd><a href="{% url 'object:instance' %}" target="right">实例</a></dd>
+                            <dd><a href="{% url 'object:image' %}" target="right">镜像</a></dd>
+                            <dd><a href="{% url 'object:notwork' %}" target="right">网络(None)</a></dd>
+                    </li>
+                    <li class="layui-nav-item">
+                            <i class="layui-icon">&#xe612;</i>
+                            <em>管理员</em>
+                            <dd><a href="{% url 'object:users' %}" target="right">用户</a></dd>
+                            <dd><a href="{% url 'object:projects' %}" target="right">项目</a></dd>
+                            <dd><a href="{% url 'object:groups' %}" target="right">用户组</a></dd>
+                            <dd><a href="{% url 'object:roles' %}" target="right">角色</a></dd>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div style="position: absolute; left: 191px; right: 20px; ">
+            <iframe src="projects/" align="right" scrolling="no"  width="96%" height="1000" name="right" border="none"></iframe>
+        </div>
+
+        <div class="layui-footer">
+            <p>© 1941310310 余春林</p>
+        </div>
+
+        <div class="mobile-mask"></div>
+    </div>
+    <script src=""></script>
+</body>
+</html>

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='IE=edge' http-equiv='X-UA-Compatible' />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    
+    <title>项目 - OpenStack Dashboard</title>
+    
+    
+      
+
+
+<link rel="stylesheet" href="/horizon/static/dashboard/css/34f8a8f8d5e5.css" type="text/css" media="screen" />
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/horizon/static/dashboard/css/9ffac9bafcee.css" type="text/css" />
+
+
+<link rel="shortcut icon" href="/horizon/static/dashboard/img/favicon.ico"/>
+
+    
+    
+  <style id="anti-clickjack">body{display:none !important;}</style>
+
+  <script type='text/javascript' charset="utf-8">
+    if (self === top) {
+      var antiClickjack = document.getElementById("anti-clickjack");
+      antiClickjack.parentNode.removeChild(antiClickjack);
+    } else {
+      top.location = self.location;
+    }
+  </script>
+
+
+    
+
+
+
+
+<script type="text/javascript" src="/horizon/static/dashboard/js/7fd3f7d69c71.js"></script>
+
+<script type='text/javascript' charset='utf-8'>
+  (function (global) {
+    'use strict';
+
+    // make translation info available on client
+    horizon.languageCode = 'zh-cn';
+    horizon.languageBidi = 'False';
+    horizon.datepickerLocale = 'zh-CN';
+
+    /* Load angular modules extensions list before we include angular/horizon.js */
+    global.horizonPlugInModules = ['horizon.dashboard.project', 'horizon.dashboard.admin', 'horizon.dashboard.identity'];
+
+    /* Storage for backend configuration variables which the frontend
+     * should be aware of.
+     */
+    var conf = horizon.conf;
+    conf.static_url = "/horizon/static/";
+    conf.ajax = {
+      queue_limit: 10
+    };
+    conf.auto_fade_alerts = {
+      delay: 3000,
+      fade_duration: 1500,
+      types: ['alert-success', 'alert-info']
+    };
+    conf.disable_password_reveal =
+      false;
+
+  })(this);
+</script>
+
+    <script type="text/javascript" charset="utf-8">
+  /*
+    Added so that we can append Horizon scoped JS events to
+    the DOM load events without running in to the "horizon"
+    name-space not currently being defined since we load the
+    scripts at the bottom of the page.
+  */
+  var addHorizonLoadEvent = function(func) {
+    var old_onload = window.onload;
+
+    if (typeof window.onload != 'function') {
+      window.onload = func;
+    } else {
+      window.onload = function() {
+        old_onload();
+        func();
+      }
+    }
+  }
+</script>
+
+    
+     
+  </head>
+  <body id="" ng-app='horizon.app' ng-strict-di>
+    <noscript>
+      <div class="javascript_disabled_alert">
+        此应用程序需要您的浏览器启用 JavaScript。
+      </div>
+    </noscript>
+    
+      <div class='topbar'>
+        
+
+<nav class="navbar navbar-default navbar-fixed-top"><div class="container-fluid"><!-- Brand and toggle get grouped for better mobile display --><div class="navbar-header"><button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><span class="sr-only">切换导航</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="/horizon/home/" target="_self"><img class="openstack-logo" src="/horizon/static/dashboard/img/logo.png" alt="OpenStack Dashboard"></a></div><!-- Collect the nav links, forms, and other content for toggling --><div class="collapse navbar-collapse" id="navbar-collapse"><ul class="nav navbar-nav"><li class="dropdown"><a class="dropdown-toggle" role="button" aria-expanded="false" data-toggle="dropdown" href="#"><span class="fa fa-list-alt"></span><span class="context-overview"><span class="context-domain">default</span><span class="fa fa-circle context-delimiter"></span><span class="context-project">admin</span></span><span class="fa fa-caret-down"></span></a><ul class="dropdown-menu context-selection selection-menu"><li><ul class="dropdown-menu"><li class="dropdown-header">域：</li><li><a class="disabled dropdown-selected"><span class="fa fa-check dropdown-selected-icon"></span><span class="dropdown-title">
+        default
+      </span></a></li></ul></li><li><ul class="dropdown-menu"><li class="dropdown-header">项目：</li><li><a class=" dropdown-selected"
+       href="/horizon/auth/switch/71cd8dd762de42c683562083704567d4/?next=/horizon/identity/"
+       target="_self"><span class="fa fa-check dropdown-selected-icon"></span><span class="dropdown-title">
+        admin
+      </span></a></li></ul></li></ul></li></ul><ul class="nav navbar-nav navbar-right"><li class="dropdown user-menu"><a data-toggle="dropdown" href="#" class="dropdown-toggle" role="button" aria-expanded="false"><span class="fa fa-user"></span><span class="user-name">admin</span><span class="fa fa-caret-down"></span></a><ul id="editor_list" class="dropdown-menu dropdown-menu-right selection-menu"><li><a href="/horizon/settings/" target="_self"><span class="fa fa-cog"></span>
+          设置
+        </a></li><li><a href="http://docs.openstack.org" target="_blank"><span class="fa fa-question-circle"></span>
+            帮助
+          </a></li><li class="divider"></li><li><a href="/horizon/auth/logout/" target="_self"><span class="fa fa-sign-out"></span>
+          注销
+        </a></li></ul></li><li class="dropdown"></li></ul></div><!-- /.navbar-collapse --></div><!-- /.container-fluid --></nav>
+
+      </div>
+      <div id='main_content'>
+        
+<div class="messages">
+<toast></toast>
+
+</div>
+        
+          
+
+<div id='sidebar'>
+  
+
+<ul id="sidebar-accordion" class="nav nav-pills nav-stacked">
+  
+    
+      <li class="panel openstack-dashboard">
+        <a data-toggle="collapse"
+           data-parent="#sidebar-accordion"
+           href="#sidebar-accordion-project"
+           
+             class="collapsed"
+           >
+          项目
+          <span class="openstack-toggle pull-right fa"></span>
+        </a>
+        <ul id="sidebar-accordion-project"
+            class="nav collapse panel-collapse">
+          
+            
+              
+                
+                  <li class="nav-header panel">
+                    <a data-toggle="collapse"
+                       data-parent="#sidebar-accordion-project"
+                       href="#sidebar-accordion-project-compute"
+                       >
+                      <span class="nav-header-title">
+                        计算
+                        <span class="openstack-toggle fa pull-right"></span>
+                      </span>
+                    </a>
+                    <ul id="sidebar-accordion-project-compute"
+                        class="nav collapse panel-collapse
+                         in">
+                
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/project/"
+                       target="_self"
+                       tabindex="1" >
+                      概述
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/project/instances/"
+                       target="_self"
+                       tabindex="2" >
+                      实例
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/project/images/"
+                       target="_self"
+                       tabindex="3" >
+                      映像
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/project/access_and_security/"
+                       target="_self"
+                       tabindex="4" >
+                      访问 &amp; 安全
+                    </a>
+                  </li>
+                
+                
+                    </ul>
+                  </li>
+                
+              
+            
+          
+            
+              
+                
+                  <li class="nav-header panel">
+                    <a data-toggle="collapse"
+                       data-parent="#sidebar-accordion-project"
+                       href="#sidebar-accordion-project-network"
+                       class="collapsed">
+                      <span class="nav-header-title">
+                        网络
+                        <span class="openstack-toggle fa pull-right"></span>
+                      </span>
+                    </a>
+                    <ul id="sidebar-accordion-project-network"
+                        class="nav collapse panel-collapse
+                        ">
+                
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/project/network_topology/"
+                       target="_self"
+                       tabindex="1" >
+                      网络拓扑
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/project/networks/"
+                       target="_self"
+                       tabindex="2" >
+                      网络
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/project/routers/"
+                       target="_self"
+                       tabindex="3" >
+                      路由器
+                    </a>
+                  </li>
+                
+                
+                    </ul>
+                  </li>
+                
+              
+            
+          
+            
+              
+            
+          
+            
+              
+                
+                  <li class="nav-header panel">
+                    <a data-toggle="collapse"
+                       data-parent="#sidebar-accordion-project"
+                       href="#sidebar-accordion-project-object_store"
+                       class="collapsed">
+                      <span class="nav-header-title">
+                        对象存储
+                        <span class="openstack-toggle fa pull-right"></span>
+                      </span>
+                    </a>
+                    <ul id="sidebar-accordion-project-object_store"
+                        class="nav collapse panel-collapse
+                        ">
+                
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/project/containers/"
+                       target="_self"
+                       tabindex="1" >
+                      容器
+                    </a>
+                  </li>
+                
+                
+                    </ul>
+                  </li>
+                
+              
+            
+          
+        </ul>
+      </li>
+    
+  
+    
+      <li class="panel openstack-dashboard">
+        <a data-toggle="collapse"
+           data-parent="#sidebar-accordion"
+           href="#sidebar-accordion-admin"
+           
+             class="collapsed"
+           >
+          管理员
+          <span class="openstack-toggle pull-right fa"></span>
+        </a>
+        <ul id="sidebar-accordion-admin"
+            class="nav collapse panel-collapse">
+          
+            
+              
+                
+                  <li class="nav-header panel">
+                    <a data-toggle="collapse"
+                       data-parent="#sidebar-accordion-admin"
+                       href="#sidebar-accordion-admin-admin"
+                       >
+                      <span class="nav-header-title">
+                        系统
+                        <span class="openstack-toggle fa pull-right"></span>
+                      </span>
+                    </a>
+                    <ul id="sidebar-accordion-admin-admin"
+                        class="nav collapse panel-collapse
+                         in">
+                
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/"
+                       target="_self"
+                       tabindex="1" >
+                      概述
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/hypervisors/"
+                       target="_self"
+                       tabindex="2" >
+                      管理程序
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/aggregates/"
+                       target="_self"
+                       tabindex="3" >
+                      主机聚集
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/instances/"
+                       target="_self"
+                       tabindex="4" >
+                      实例
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/flavors/"
+                       target="_self"
+                       tabindex="5" >
+                      flavor 数
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/images/"
+                       target="_self"
+                       tabindex="6" >
+                      映像
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/networks/"
+                       target="_self"
+                       tabindex="7" >
+                      网络
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/routers/"
+                       target="_self"
+                       tabindex="8" >
+                      路由器
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/defaults/"
+                       target="_self"
+                       tabindex="9" >
+                      缺省值
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/metadata_defs/"
+                       target="_self"
+                       tabindex="10" >
+                      元数据定义
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/admin/info/"
+                       target="_self"
+                       tabindex="11" >
+                      系统信息
+                    </a>
+                  </li>
+                
+                
+                    </ul>
+                  </li>
+                
+              
+            
+          
+        </ul>
+      </li>
+    
+  
+    
+      <li class="panel openstack-dashboard active">
+        <a data-toggle="collapse"
+           data-parent="#sidebar-accordion"
+           href="#sidebar-accordion-identity"
+           >
+          身份管理
+          <span class="openstack-toggle pull-right fa"></span>
+        </a>
+        <ul id="sidebar-accordion-identity"
+            class="nav collapse panel-collapse in">
+          
+            
+              
+                
+                
+                  <li class="panel openstack-panel active">
+                    <a class="openstack-spin" href="/horizon/identity/"
+                       target="_self"
+                       tabindex="1" >
+                      项目
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/identity/users/"
+                       target="_self"
+                       tabindex="2" >
+                      用户
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/identity/groups/"
+                       target="_self"
+                       tabindex="3" >
+                      组
+                    </a>
+                  </li>
+                
+                  <li class="panel openstack-panel">
+                    <a class="openstack-spin" href="/horizon/identity/roles/"
+                       target="_self"
+                       tabindex="4" >
+                      角色
+                    </a>
+                  </li>
+                
+                
+              
+            
+          
+        </ul>
+      </li>
+    
+  
+</ul>
+
+</div>
+
+        
+        <div id='content_body'>
+          <div class='container-fluid'>
+            <div class="row">
+              <div class="col-xs-12">
+                
+  
+
+  <div class='page-header'>
+    <h1>
+    
+    项目
+    </h1>
+  </div>
+
+
+
+                
+  
+
+<div class="table_wrapper">
+  <form action="/horizon/identity/" method="POST"><input type='hidden' name='csrfmiddlewaretoken' value='lNPba3JnIxKDiTvJ2VvlL0kAF6V42TAL' />
+  
+
+   <table id="tenants" class="table table-striped datatable ">
+    
+      <caption>
+        
+        
+<div class="table_actions clearfix">
+
+  
+    <div class="table_search client">
+      <div class="form-group has-feedback">
+        <input class="form-control" value="" type="text" name="tenants__filter__q" placeholder="过滤"/>
+        <span class="fa fa-search search-icon form-control-feedback"></span>
+      </div>
+    </div>
+  
+
+
+
+
+  
+  
+    
+<a id="tenants__action_create" class="btn btn-default ajax-modal" href="/horizon/identity/create" title="创建项目"> <span class="fa fa-plus"></span> 创建项目 </a>
+
+  
+    
+<button data-batch-action="true" id="tenants__action_delete" class="btn btn-default btn-danger" name="action" help_text="此操作不能撤消。" type="submit" value="tenants__delete"> <span class="fa fa-trash"></span> 删除项目 </button>
+
+  
+
+  
+  
+
+
+</div>
+
+      </caption>
+    
+   <thead>
+  
+      
+  
+  
+      
+      <tr class="table_column_header">
+        
+          <th  class="multi_select_column" data-selenium="multi_select">
+            
+            
+          </th>
+        
+          <th  class="sortable anchor normal_column" data-selenium="name">
+            名称
+            
+          </th>
+        
+          <th  class="sortable normal_column" data-selenium="description">
+            描述
+            
+          </th>
+        
+          <th  class="sortable normal_column" data-selenium="id">
+            项目标识
+            
+          </th>
+        
+          <th  class="sortable normal_column" data-selenium="domain_name">
+            域名
+            
+          </th>
+        
+          <th  class="sortable normal_column" data-selenium="enabled">
+            已启用
+            
+          </th>
+        
+          <th  class="actions_column" data-selenium="actions">
+            Actions
+            
+          </th>
+        
+      </tr>
+      
+  
+    </thead>
+  
+    <tbody>
+    
+      <tr class="ajax-update" data-display="service" data-object-id="35ba314ab4d141f988ca0d2a22863bba" data-update-interval="2500" data-update-url="/horizon/identity/?action=row_update&amp;table=tenants&amp;obj_id=35ba314ab4d141f988ca0d2a22863bba" id="tenants__row__35ba314ab4d141f988ca0d2a22863bba">
+    <td class="multi_select_column"><div class="themable-checkbox"><input class="table-row-multi-select" id="71b237ad-59bb-4d35-b145-4a5803902b1e" name="object_ids" type="checkbox" value="35ba314ab4d141f988ca0d2a22863bba" /><label for="71b237ad-59bb-4d35-b145-4a5803902b1e"></label></div></td><td class="inline_edit_available sortable anchor normal_column" data-cell-name="name" data-update-url="/horizon/identity/?action=cell_update&amp;table=tenants&amp;cell_name=name&amp;obj_id=35ba314ab4d141f988ca0d2a22863bba"><div class="table_cell_wrapper"><div class="table_cell_data_wrapper"><a href="/horizon/identity/35ba314ab4d141f988ca0d2a22863bba/detail/" >service</a></div><div class="table_cell_action"><button class="ajax-inline-edit"><span class="fa fa-pencil"></span></button></div><div class="inline-edit-status"></div></div></td><td class="inline_edit_available sortable normal_column" data-cell-name="description" data-update-url="/horizon/identity/?action=cell_update&amp;table=tenants&amp;cell_name=description&amp;obj_id=35ba314ab4d141f988ca0d2a22863bba"><div class="table_cell_wrapper"><div class="table_cell_data_wrapper">
+                    Service Project
+                </div><div class="table_cell_action"><button class="ajax-inline-edit"><span class="fa fa-pencil"></span></button></div><div class="inline-edit-status"></div></div></td><td class="sortable normal_column">
+            35ba314ab4d141f988ca0d2a22863bba
+        </td><td class="sortable normal_column">
+            default
+        </td><td class="inline_edit_available status_up sortable normal_column" data-cell-name="enabled" data-update-url="/horizon/identity/?action=cell_update&amp;table=tenants&amp;cell_name=enabled&amp;obj_id=35ba314ab4d141f988ca0d2a22863bba"><div class="table_cell_wrapper"><div class="table_cell_data_wrapper">
+                    True
+                </div><div class="table_cell_action"><button class="ajax-inline-edit"><span class="fa fa-pencil"></span></button></div><div class="inline-edit-status"></div></div></td><td class="actions_column"><div class="btn-group "><a id="tenants__row_35ba314ab4d141f988ca0d2a22863bba__action_users" class="btn btn-default btn-sm ajax-modal" href="/horizon/identity/35ba314ab4d141f988ca0d2a22863bba/update/?step=update_members"> 管理成员 </a><a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#"><span class="fa fa-caret-down"></span></a><ul class="dropdown-menu dropdown-menu-right row_actions"><li><a id="tenants__row_35ba314ab4d141f988ca0d2a22863bba__action_groups" class="ajax-modal" href="/horizon/identity/35ba314ab4d141f988ca0d2a22863bba/update/?step=update_group_members"> 修改组 </a></li><li><a id="tenants__row_35ba314ab4d141f988ca0d2a22863bba__action_update" class="ajax-modal" href="/horizon/identity/35ba314ab4d141f988ca0d2a22863bba/update/"> 编辑项目 </a></li><li><a id="tenants__row_35ba314ab4d141f988ca0d2a22863bba__action_usage" class="" href="/horizon/identity/35ba314ab4d141f988ca0d2a22863bba/usage/"> 查看使用情况 </a></li><li><a id="tenants__row_35ba314ab4d141f988ca0d2a22863bba__action_quotas" class="ajax-modal" href="/horizon/identity/35ba314ab4d141f988ca0d2a22863bba/update/?step=update_quotas"> 修改配额 </a></li><li><button data-batch-action="true" id="tenants__row_35ba314ab4d141f988ca0d2a22863bba__action_delete" class="btn-danger" name="action" help_text="此操作不能撤消。" type="submit" value="tenants__delete__35ba314ab4d141f988ca0d2a22863bba"> 删除项目 </button></li></ul></div></td>
+</tr>
+
+    
+      <tr class="ajax-update" data-display="admin" data-object-id="71cd8dd762de42c683562083704567d4" data-update-interval="2500" data-update-url="/horizon/identity/?action=row_update&amp;table=tenants&amp;obj_id=71cd8dd762de42c683562083704567d4" id="tenants__row__71cd8dd762de42c683562083704567d4">
+    <td class="multi_select_column"><div class="themable-checkbox"><input class="table-row-multi-select" id="83459959-0059-4a04-b3e9-6a781b365d77" name="object_ids" type="checkbox" value="71cd8dd762de42c683562083704567d4" /><label for="83459959-0059-4a04-b3e9-6a781b365d77"></label></div></td><td class="inline_edit_available sortable anchor normal_column" data-cell-name="name" data-update-url="/horizon/identity/?action=cell_update&amp;table=tenants&amp;cell_name=name&amp;obj_id=71cd8dd762de42c683562083704567d4"><div class="table_cell_wrapper"><div class="table_cell_data_wrapper"><a href="/horizon/identity/71cd8dd762de42c683562083704567d4/detail/" >admin</a></div><div class="table_cell_action"><button class="ajax-inline-edit"><span class="fa fa-pencil"></span></button></div><div class="inline-edit-status"></div></div></td><td class="inline_edit_available sortable normal_column" data-cell-name="description" data-update-url="/horizon/identity/?action=cell_update&amp;table=tenants&amp;cell_name=description&amp;obj_id=71cd8dd762de42c683562083704567d4"><div class="table_cell_wrapper"><div class="table_cell_data_wrapper">
+                    Admin Project
+                </div><div class="table_cell_action"><button class="ajax-inline-edit"><span class="fa fa-pencil"></span></button></div><div class="inline-edit-status"></div></div></td><td class="sortable normal_column">
+            71cd8dd762de42c683562083704567d4
+        </td><td class="sortable normal_column">
+            default
+        </td><td class="inline_edit_available status_up sortable normal_column" data-cell-name="enabled" data-update-url="/horizon/identity/?action=cell_update&amp;table=tenants&amp;cell_name=enabled&amp;obj_id=71cd8dd762de42c683562083704567d4">
+            True
+        </td><td class="actions_column"><div class="btn-group "><a id="tenants__row_71cd8dd762de42c683562083704567d4__action_users" class="btn btn-default btn-sm ajax-modal" href="/horizon/identity/71cd8dd762de42c683562083704567d4/update/?step=update_members"> 管理成员 </a><a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#"><span class="fa fa-caret-down"></span></a><ul class="dropdown-menu dropdown-menu-right row_actions"><li><a id="tenants__row_71cd8dd762de42c683562083704567d4__action_groups" class="ajax-modal" href="/horizon/identity/71cd8dd762de42c683562083704567d4/update/?step=update_group_members"> 修改组 </a></li><li><a id="tenants__row_71cd8dd762de42c683562083704567d4__action_update" class="ajax-modal" href="/horizon/identity/71cd8dd762de42c683562083704567d4/update/"> 编辑项目 </a></li><li><a id="tenants__row_71cd8dd762de42c683562083704567d4__action_usage" class="" href="/horizon/identity/71cd8dd762de42c683562083704567d4/usage/"> 查看使用情况 </a></li><li><a id="tenants__row_71cd8dd762de42c683562083704567d4__action_quotas" class="ajax-modal" href="/horizon/identity/71cd8dd762de42c683562083704567d4/update/?step=update_quotas"> 修改配额 </a></li><li><button data-batch-action="true" id="tenants__row_71cd8dd762de42c683562083704567d4__action_delete" class="btn-danger" name="action" help_text="此操作不能撤消。" type="submit" value="tenants__delete__71cd8dd762de42c683562083704567d4"> 删除项目 </button></li></ul></div></td>
+</tr>
+
+    
+      <tr class="ajax-update" data-display="demo" data-object-id="7c24edb69d014b34831ec0fd84f9d78b" data-update-interval="2500" data-update-url="/horizon/identity/?action=row_update&amp;table=tenants&amp;obj_id=7c24edb69d014b34831ec0fd84f9d78b" id="tenants__row__7c24edb69d014b34831ec0fd84f9d78b">
+    <td class="multi_select_column"><div class="themable-checkbox"><input class="table-row-multi-select" id="c20f2953-1152-48ad-9bde-f376d7017e95" name="object_ids" type="checkbox" value="7c24edb69d014b34831ec0fd84f9d78b" /><label for="c20f2953-1152-48ad-9bde-f376d7017e95"></label></div></td><td class="inline_edit_available sortable anchor normal_column" data-cell-name="name" data-update-url="/horizon/identity/?action=cell_update&amp;table=tenants&amp;cell_name=name&amp;obj_id=7c24edb69d014b34831ec0fd84f9d78b"><div class="table_cell_wrapper"><div class="table_cell_data_wrapper"><a href="/horizon/identity/7c24edb69d014b34831ec0fd84f9d78b/detail/" >demo</a></div><div class="table_cell_action"><button class="ajax-inline-edit"><span class="fa fa-pencil"></span></button></div><div class="inline-edit-status"></div></div></td><td class="inline_edit_available sortable normal_column" data-cell-name="description" data-update-url="/horizon/identity/?action=cell_update&amp;table=tenants&amp;cell_name=description&amp;obj_id=7c24edb69d014b34831ec0fd84f9d78b"><div class="table_cell_wrapper"><div class="table_cell_data_wrapper">
+                    Demo Project
+                </div><div class="table_cell_action"><button class="ajax-inline-edit"><span class="fa fa-pencil"></span></button></div><div class="inline-edit-status"></div></div></td><td class="sortable normal_column">
+            7c24edb69d014b34831ec0fd84f9d78b
+        </td><td class="sortable normal_column">
+            default
+        </td><td class="inline_edit_available status_up sortable normal_column" data-cell-name="enabled" data-update-url="/horizon/identity/?action=cell_update&amp;table=tenants&amp;cell_name=enabled&amp;obj_id=7c24edb69d014b34831ec0fd84f9d78b"><div class="table_cell_wrapper"><div class="table_cell_data_wrapper">
+                    True
+                </div><div class="table_cell_action"><button class="ajax-inline-edit"><span class="fa fa-pencil"></span></button></div><div class="inline-edit-status"></div></div></td><td class="actions_column"><div class="btn-group "><a id="tenants__row_7c24edb69d014b34831ec0fd84f9d78b__action_users" class="btn btn-default btn-sm ajax-modal" href="/horizon/identity/7c24edb69d014b34831ec0fd84f9d78b/update/?step=update_members"> 管理成员 </a><a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#"><span class="fa fa-caret-down"></span></a><ul class="dropdown-menu dropdown-menu-right row_actions"><li><a id="tenants__row_7c24edb69d014b34831ec0fd84f9d78b__action_groups" class="ajax-modal" href="/horizon/identity/7c24edb69d014b34831ec0fd84f9d78b/update/?step=update_group_members"> 修改组 </a></li><li><a id="tenants__row_7c24edb69d014b34831ec0fd84f9d78b__action_update" class="ajax-modal" href="/horizon/identity/7c24edb69d014b34831ec0fd84f9d78b/update/"> 编辑项目 </a></li><li><a id="tenants__row_7c24edb69d014b34831ec0fd84f9d78b__action_usage" class="" href="/horizon/identity/7c24edb69d014b34831ec0fd84f9d78b/usage/"> 查看使用情况 </a></li><li><a id="tenants__row_7c24edb69d014b34831ec0fd84f9d78b__action_quotas" class="ajax-modal" href="/horizon/identity/7c24edb69d014b34831ec0fd84f9d78b/update/?step=update_quotas"> 修改配额 </a></li><li><button data-batch-action="true" id="tenants__row_7c24edb69d014b34831ec0fd84f9d78b__action_delete" class="btn-danger" name="action" help_text="此操作不能撤消。" type="submit" value="tenants__delete__7c24edb69d014b34831ec0fd84f9d78b"> 删除项目 </button></li></ul></div></td>
+</tr>
+
+    
+    </tbody>
+  
+  
+    
+    <tfoot>
+      
+      <tr>
+        <td colspan="7">
+          <span class="table_count">Displaying 3 items</span>
+          
+          
+          
+        </td>
+      </tr>
+    </tfoot>
+    
+  
+  </table>
+
+  
+  </form>
+</div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    <div id="footer">
+      
+        
+      
+    </div>
+    
+      
+
+
+
+
+
+<script type="text/javascript" src="/horizon/i18n/js/horizon+openstack_dashboard/"></script>
+
+
+
+<script type="text/javascript" src="/horizon/static/dashboard/js/8a74696bb7fd.js"></script>
+
+
+<script type="text/html" id="modal_template"><div class="modal" data-backdrop="{{modal_backdrop}}"><div class="modal-dialog"><div class="modal-content"><div class='modal-header'><a class='close' data-dismiss='modal' href="#"><span class="fa fa-times"></span></a><h3 class="modal-title">{{title}}</h3></div><div class='modal-body'>
+        {{body}}
+      </div><div class='modal-footer'><a href='#' class='btn btn-default cancel' data-dismiss='modal'>{{cancel}}</a><a href='#' class='btn btn-primary'>{{confirm}}</a></div></div></div></div></script>
+
+<script type="text/html" id="empty_row_template"><tr class="odd empty"><td colspan="{{colspan}}">{{no_items_label}}</td></tr></script>
+
+<script type="text/html" id="alert_message_template"><div class="alert alert-dismissable fade in alert-{{type}}"><a class="close" data-dismiss="alert" href="#"><span class="fa fa-times"></span></a><p><strong>{{type_display}}</strong>
+    {{#safe}}
+      {{{message}}}
+    {{/safe}}
+    {{^safe}}
+      {{message}}
+    {{/safe}}
+  </p></div></script>
+
+<script type="text/html" id="spinner-modal"><div class="modal loading"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><p>{{text}}&hellip;</p></div></div></div></div></script>
+
+<script type="text/html" id="membership_template"><ul class="nav nav-pills btn-group btn-group-sm"><li class="member" data-{{step_slug}}-id="{{data_id}}"><span class="display_name">{{display_name}}</span></li><li class="active"><a class="btn btn-primary" href="#add_remove">{{text}}</a></li><li class="dropdown role_options"><a class="dropdown-toggle btn btn-default" data-toggle="dropdown" href="#"><span class="roles_display">{{roles_label}}</span><span class="fa fa-caret-down"></span></a><ul class="dropdown-menu dropdown-menu-right role_dropdown">
+      {{#roles}}
+      <li data-role-id="{{role_id}}"><a target="_blank"><span class="fa fa-check"></span>
+          {{role_name}}
+        </a></li>
+      {{/roles}}
+    </ul></li></ul></script>
+
+
+
+
+<script src='/horizon/static/horizon/lib/bootstrap_datepicker/locales/bootstrap-datepicker.zh-CN.js'></script>
+
+
+
+<script>
+  // Call init on DOM ready.
+  $(document).ready(horizon.init);
+</script>
+
+    
+    <div id="modal_wrapper"></div>
+  </body>
+</html>

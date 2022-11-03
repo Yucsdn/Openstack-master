@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="{% static 'css/Site.css' %}" type="text/css" media="all"/>
+		<link rel="stylesheet" href="{% static 'css/zy.all.css' %}" type="text/css" media="all"/>
+		<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css" media="all"/>
+		<link rel="stylesheet" href="{% static 'css/amazeui.min.css' %}" type="text/css" media="all"/>
+		<link rel="stylesheet" href="{% static 'css/admin.css' %}" type="text/css" media="all"/>
+		<link rel="stylesheet" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" type="text/css" media="all"/>
+		<style>
+			.black_overlay{
+				display: none; /* 此元素不会被显示*/
+				position: absolute;
+				top: 0%;
+				left: 0%;
+				width: 100%;
+				height: 100%;
+				background-color: black;
+				z-index:1001; /* z-index 属性设置元素的堆叠顺序。拥有更高堆叠顺序的元素总是会处于堆叠顺序较低的元素的前面。*/
+				-moz-opacity: 0.8;
+				opacity:.40; /* opacity 属性设置元素的不透明级别。*/
+				filter: alpha(opacity=88);
+				/* 所有浏览器都支持 opacity 属性。   注释：IE8 以及更早的版本支持替代的 filter 属性。例如：filter:Alpha(opacity=50)。*/
+			}
+			.white_content {
+				display: none;
+				position: absolute;
+				top: 100px;
+				left: 200px;
+				width: 70%;
+				height: 58%;
+				padding: 20px;
+				border-radius: 20px 20px 20px 20px;
+				background-color: rgb(255, 255, 255);
+				z-index:1002;
+				overflow: auto;
+			}
+			.inputs{
+				height: 350px;
+				width: 600px;
+				float:left;
+			}
+			.image{
+				height: 350px;
+				width: 400px;
+				float:left;
+			}
+			.a1{
+				height: 50px;
+				width: 300px;
+				margin-top: 15px;
+				margin-left: 200px;
+				float:left;
+			}
+			.a2{
+				height: 50px;
+				width: 300px;
+				margin-top: 15px;
+				margin-left: 100px;
+				float:left;
+			}
+			.inputa{
+				margin-left: 120px;
+				border: 0;
+            	width: 60%;
+            	font-size: 20px;
+				color: #000000;
+				border-bottom: 3px solid #888888;
+				padding: 5px 10px;
+				margin-top: 30px;
+			}
+			.buttona{
+				width: 200px;
+				height: 45px;
+				border-radius: 8px;
+				color: rgb(255, 255, 255);
+				background-color: rgb(107, 129, 255);
+				border: 0px;
+			}
+			.a{
+				display:block;
+				width:200px;
+				height:45px;
+				text-decoration:none;
+				line-height:40px;
+				text-align:center;
+				border-radius: 8px 8px 8px 8px;
+				background-color: rgb(255, 160, 83);
+				color:white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="dvcontent">
+
+			<div>
+				<!--tab start-->
+				<div class="tabs">
+					<div class="hd">
+						<ul>
+							<li class="on" style="box-sizing: initial;-webkit-box-sizing: initial;">角色管理</li>
+						</ul>
+						<div class="btn-group" style = "position:absolute; left:1400px; top:1px">
+							<a class="btn btn-default" href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">添加角色</a>
+							<button type="button" class="btn btn-default dropdown-toggle"
+									data-toggle="dropdown">
+								<span class="caret"></span>
+								<span class="sr-only">切换下拉菜单</span>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">功能</a></li>
+								<li><a href="#">另一个功能</a></li>
+								<li><a href="#">其他</a></li>
+								<li><a href="#">分离的链接</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="bd">
+						<ul style="display: block;padding: 20px;">
+							<li>
+								<!--分页显示角色信息 start-->
+								<div id="dv1">
+									<table class="table" id="tbRecord">
+										<thead>
+											<tr>
+												<th>角色名称</th>
+												<th>角色ID</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for r in dat %}
+											<form action="/openstack/roles_revise_delete/" method="post">
+												{% csrf_token %}
+												<tr>
+													<input type="text" name="role_id" value="{{r.id}}" style="display:none">
+													<td>{{r.name}}</td>
+													<td>{{r.id}}</td>
+													<td class="edit">
+														<div class="btn-group">
+															<a class="btn btn-default" href = "javascript:void(0)" onclick = "document.getElementById('lights').style.display='block';document.getElementById('fades').style.display='block';document.getElementById('id').value='{{r.id}}'">修改</a>
+															<button style="font-size: 18px; width: 25px; background-color: #ffffff; color: black; border-radius: 0px 3px 3px 0px; border: 1px solid #d1d0d0; float: left;" type="button" data-toggle="dropdown">
+																<span class="caret"></span>
+																<span class="sr-only"></span>
+															</button>
+															<ul class="dropdown-menu" role="menu">
+																<li><button style="font-size: 15px; background-color: #ffffff; color: black;" type="submit" name="delete">删除</button></li>
+																<li><a href="https://www.baidu.com/">功能</a></li>
+																<li><a href="https://www.baidu.com/">另一个功能</a></li>
+																<li><a href="https://www.baidu.com/">其他</a></li>
+															</ul>
+														</div>
+													</td>
+												</tr>
+											</form>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+								<!--分页显示角色信息 end-->
+							</li>
+						</ul>
+						<ul class="theme-popbod dform" style="display: none;">
+
+						</ul>
+					</div>
+				</div>
+				<!--tab end-->
+			</div>
+
+			<div id="light" class="white_content">
+			<!-- 窗口部分代码 -->
+				<form action="/openstack/roles_add/" method="post">
+					{% csrf_token %}
+					<div style="margin-top: 50px; margin-left: 30px;">
+						<div class="inputs">
+							<input class="inputa" type="text" id="name" name="name" placeholder="请输入名称 (必填)"/></br>
+							<input class="inputa" type="text" id="description" name="description" placeholder="可以描述一下 (选填)"/></br>
+						</div>
+						<div class="image">
+							<img style="height: 330px; width: 300px; margin-top: 20px; margin-left: 10px; " src="{% static 'images/dog.png' %}" alt=""/>
+						</div>
+						<div class="a1">
+							<a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'"><button class="buttona" type="submit">确认</button></a>
+						</div>
+						<div class="a2">
+							<a class="a" href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">关闭</a>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="fade" class="black_overlay"></div>
+
+			<div id="lights" class="white_content">
+			<!-- 窗口部分代码 -->
+				<form action="/openstack/roles_revise_delete/" method="post">
+					{% csrf_token %}
+					<div style="margin-top: 50px; margin-left: 30px;">
+						<div class="inputs">
+							<input type="text" id="id" name="id" style="display:none">
+							<input class="inputa" type="text" id="name" name="name" placeholder="修改名称"/></br>
+							<input class="inputa" type="text" id="description" name="description" placeholder="修改描述"/></br>
+						</div>
+						<div class="image">
+							<img style="height: 330px; width: 300px; margin-top: 20px; margin-left: 10px; " src="{% static 'images/dog.png' %}" alt=""/>
+						</div>
+						<div class="a1">
+							<a href = "javascript:void(0)" onclick = "document.getElementById('lights').style.display='none';document.getElementById('fades').style.display='none'">
+								<button class="buttona" type="submit" name="revise">确认</button>
+							</a>
+						</div>
+						<div class="a2">
+							<a class="a" href = "javascript:void(0)" onclick = "document.getElementById('lights').style.display='none';document.getElementById('fades').style.display='none'">关闭</a>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div id="fades" class="black_overlay"></div>
+
+			<script src="{% static 'bootstrap-3.3.7-dist/js/jquery.min.js' %}" type="text/javascript"></script>
+			<script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}" type="text/javascript"></script>
+			 <script src="{% static 'js/jquery-1.7.2.min.js' %}" type="text/javascript"></script>
+              <script src="{% static 'js/plugs/Jqueryplugs.js' %}" type="text/javascript"></script>
+              <script src="{% static 'js/_layout.js' %}" type="text/javascript"></script>
+             <script src="{% static 'js/plugs/jquery.SuperSlide.source.js' %}" type="text/javascript"></script>
+
+		</div>
+	</body>
+
+</html>
